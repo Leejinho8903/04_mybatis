@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+  <environments default="dev">
+    <environment id="dev">
+    <!-- JDBC와 MANAGED 둘 중 하나 선택 가능
+         JDBC : 수동 커밋, MANAGED : 자동 커밋 -->
+      <transactionManager type="JDBC"/>
+      <!-- POOLED와 UNPOOLED 선택 가능
+           POOLED : 커넥션풀 사용, UNPOOLED : 커넥션풀 미사용 -->
+      <dataSource type="POOLED">
+        <property name="driver" value="oracle.jdbc.driver.OracleDriver"/>
+        <property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
+        <property name="username" value="C##GREEDY"/>
+        <property name="password" value="GREEDY"/>
+      </dataSource>
+    </environment>
+  </environments>
+  <mappers>
+    <mapper resource="com/greedy/section02/xmlconfig/mapper.xml"/>
+  </mappers>
+</configuration>

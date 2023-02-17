@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MenuMapper">
+  
+  <!-- 조회한 컬럼과 DTO를 매핑시키기 위한 설정으로 resultMap을 선언한다. -->
+  <resultMap type="com.greedy.section01.xmlconfig.MenuDTO" id="menuResultMap">
+  	<id property="menuCode" column="MENU_CODE"/>
+  	<result property="menuName" column="MENU_NAME"/>
+  	<result property="menuPrice" column="MENU_PRICE"/>
+  	<result property="categoryCode" column="CATEGORY_CODE"/>
+  	<result property="orderableStatus" column="ORDERABLE_STATUS"/>
+  </resultMap>
+
+  <select id="selectAllMenu" resultMap="menuResultMap">
+    SELECT
+           MENU_CODE
+         , MENU_NAME
+         , MENU_PRICE
+         , CATEGORY_CODE
+         , ORDERABLE_STATUS
+      FROM TBL_MENU
+     WHERE ORDERABLE_STATUS = 'Y'
+     ORDER BY MENU_CODE
+  </select>
+  
+  <!-- 
+  파라미터가 한 개인 경우 바인딩 되는 이름은 무엇을 작성해도 상관 없다. 또한 파라미터 타입도 지정하지 않아도 된다.
+  resultMap : 위에서 정의한 resultMap을 리턴 타입으로 이용하는 경우
+  resultType : 이미 정의 되어 있는 타입을 리턴 타입으로 이용하는 경우
+   -->
+  <select id="selectMenuByCode" parameterType="_int" resultMap="menuResultMap">
+    SELECT
+           MENU_CODE
+         , MENU_NAME
+         , MENU_PRICE
+         , CATEGORY_CODE
+         , ORDERABLE_STATUS
+      FROM TBL_MENU
+     WHERE ORDERABLE_STATUS = 'Y'  
+       AND MENU_CODE = #{ code }
+  </select>
+  
+  <!-- insert, update, delete의 경우 resultType을 작성하지 않는다. 기본 _int로 수행 결과 행의 갯수를 리턴한다. 
+  	   parameterType은 생략 가능하다.
+  	   파라미터로 전달 된 DTO의 필드 이름으로 값을 바인딩 해주어야 한다. getter를 이용하며 getter 없는 경우 에러 발생한다.
+  -->
+  <insert id="insertMenu" parameterType="com.greedy.section01.xmlconfig.MenuDTO">
+  	INSERT
+  	  INTO TBL_MENU
+  	(
+  	  MENU_CODE
+  	, MENU_NAME
+  	, MENU_PRICE
+  	, CATEGORY_CODE
+  	, ORDERABLE_STATUS
+  	)
+  	VALUES
+  	(
+  	  SEQ_MENU_CODE.NEXTVAL
+  	, #{ menuName }
+  	, #{ menuPrice}
+  	, #{ categoryCode }
+  	, 'Y'
+  	)
+  </insert>
+  
+  <update id="updateMenu" parameterType="com.greedy.section01.xmlconfig.MenuDTO">
+  	UPDATE
+  	       TBL_MENU
+  	   SET MENU_NAME = #{ menuName }
+  	     , MENU_PRICE = #{ menuPrice }
+  	     , CATEGORY_CODE = #{ categoryCode }
+  	 WHERE MENU_CODE = #{ menuCode }
+  </update>
+  
+  <delete id="deleteMenu" parameterType="_int">
+  	DELETE
+  	  FROM TBL_MENU
+  	 WHERE MENU_CODE = #{ menuCode }
+  </delete>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</mapper>
